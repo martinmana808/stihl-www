@@ -21,7 +21,7 @@
 @text-hero-height: 1.1em;
 @text-page-height: 1.27em;
 @text-section-height: 1.2em;
-@text-block-height: 1.35em;
+@text-block-height: 1.6em;
 @text-body-height: 1.66em;
 @text-small-height: 1.375em;
 @text-eyebrow-height: 1.36em; 
@@ -837,11 +837,22 @@ p + * {
   left: 0;
   object-fit: cover;
   z-index: -1;
-  height: calc(100% + @bradius--l);
+  height: calc(100% + 0px);
   max-width: none;
   width: 100%;
+
+  img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
-.hero-overlay {
+.hero-overlays {
   border-top-left-radius: @bradius--l;
   border-bottom-left-radius: @bradius--l;
   border-top-right-radius: @bradius--l;
@@ -854,15 +865,16 @@ p + * {
   left: 0;
   background: RGBA(0, 0, 0, 100);
   background: linear-gradient(21deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
-  height: calc(100% + @bradius--l);
-  z-index: -1;
+  height: calc(100% + 0px);
+  z-index: 1;
 }
 
 ////////////////////////////////////////////////////////////////////////
 // Products
 ///////////////////////////////////////////////////////////////////////
 .products {
-  z-index: 1;
+  z-index: 2;
+  background: @color-grey-light;
 }
 .products-grid {
   display: flex;
@@ -871,7 +883,13 @@ p + * {
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  scroll-snap-type: mandatory;
+
+  /* 👇 the key bits */
+  scroll-snap-type: x mandatory;            /* pick the axis */
+  scroll-padding-inline: clamp(1.25rem, 6.25vw, 6.25rem); /* match your padding */
+  /* optional if you hate skipping: */
+  /* scroll-snap-stop: always; */
+
   padding-inline: @spacing-x;
   margin-inline: calc(@spacing-x * -1);
   scrollbar-width: none;
@@ -881,10 +899,23 @@ p + * {
 }
 .product-card {
   padding: 50px 20px 30px 20px;
-  background-color: @color-bg;
-  border-radius: @bradius--s;
+  background-color: #fff;
+  border-radius: 1rem;
   flex: 0 0 21.64%;
+
+  /* 👇 tell each item where to snap */
   scroll-snap-align: start;
+  /* optional: if you have big gaps and want stricter stops */
+  /* scroll-margin-inline: 0;  */
+
+  img {
+    transition: all @default-duration @default-easing;
+  }
+  &:hover, &:focus {
+    img {
+      transform: scale(1.05);
+    }
+  }
 }
 .product-name {
   font-size: 1rem;

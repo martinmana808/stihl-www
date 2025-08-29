@@ -107,13 +107,53 @@
     (gallery as any).on('select', syncActive);
     syncActive();
   });
+
+  // Hero parallax
+  onMount(() => {
+    const img = document.querySelector('.hero-image') as HTMLElement | null;
+    const overlay = document.querySelector('.hero-overlay') as HTMLElement | null;
+    if (!img) return;
+
+    img.style.willChange = 'transform';
+    if (overlay) overlay.style.willChange = 'transform, opacity';
+
+    let ticking = false;
+    const speed = 0.3; // smaller = slower movement
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const y = window.scrollY * speed;
+          img.style.transform = `translate3d(0, ${y}px, 0)`;
+          if (overlay) {
+            overlay.style.transform = `translate3d(0, ${y}px, 0)`;
+            overlay.style.opacity = String(Math.min(1, 1 - window.scrollY / 400));
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll as EventListener);
+      window.removeEventListener('resize', onScroll as EventListener);
+    };
+  });
 </script>
 
 <!-- Hero Section -->
 <section class="hero spacing-x relative">
   <div class="mw-container mx-auto">
-    <img class="hero-image " src="/images/hero.png" alt="Stihl Shop" />
-    <div class="hero-overlay "></div>
+    <div class="hero-image ">\
+      <div class="hero-overlays "></div>
+      <img class=" " src="/images/hero.png" alt="Stihl Shop" />
+    </div>
+    
     <div class="container">
       <div class="hero-content spacing-y--block">
         <div class="hero-content__text">
@@ -133,7 +173,7 @@
 </section>
 
 <!-- Products Section -->
-<section class="products spacing-x spacing-y--section bg-orange c-bg bradius--section relative" id="products">
+<section class="products spacing-x spacing-y--section   bradius--section relative" id="products">
   <div class="mw-container mx-auto">
     <img class="products-deco" src="/images/products-deco.svg" alt="" aria-hidden="true" />
     <div class="container">
@@ -143,12 +183,12 @@
           <h2 class="text--section mb-0">Everything you need</h2>
           <a href="/products" class="section-link link--w-icon">
             View all products
-            <img src="/images/icon--arrow-bg.svg" alt="arrow right" aria-hidden="true" />
+            <img src="/images/icon--arrow-body.svg" alt="arrow right" aria-hidden="true" />
           </a>
         </div>
       </div>
       <div class="products-grid">
-        <div class="product-card">
+        <a class="product-card" href="/">
           <div class="product-image">
             <img src="/images/productplaceholder.png" alt="Ride-on Mower" />
           </div>
@@ -159,8 +199,8 @@
               $222
             </div>
           </div>
-        </div>
-        <div class="product-card">
+        </a>
+        <a class="product-card" href="/">
           <div class="product-image">
             <img src="/images/productplaceholder.png" alt="String Trimmer" />
           </div>
@@ -171,8 +211,8 @@
               $222
             </div>
           </div>
-        </div>
-        <div class="product-card">
+        </a>
+        <a class="product-card" href="/">
           <div class="product-image">
             <img src="/images/productplaceholder.png" alt="Chainsaw" />
           </div>
@@ -183,8 +223,8 @@
               $222
             </div>
           </div>
-        </div>
-        <div class="product-card">
+        </a>
+        <a class="product-card" href="/">
           <div class="product-image">
             <img src="/images/productplaceholder.png" alt="Pressure Washer" />
           </div>
@@ -195,8 +235,8 @@
               $222
             </div>
           </div>
-        </div>
-        <div class="product-card">
+        </a>
+        <a class="product-card" href="/">
           <div class="product-image">
             <img src="/images/productplaceholder.png" alt="Hedge Trimmer" />
           </div>
@@ -207,8 +247,8 @@
               $222
             </div>
           </div>
-        </div>
-        <div class="product-card">
+        </a>
+        <a class="product-card" href="/">
           <div class="product-image">
             <img src="/images/productplaceholder.png" alt="Hand Saw" />
           </div>
@@ -219,7 +259,7 @@
               $222
             </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
